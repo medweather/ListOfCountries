@@ -11,8 +11,12 @@ public class Country {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+
+    @Column(name = "top_level_domain")
     private String[] topLevelDomain;
     private long population;
+
+    @Column(name = "lat_ing")
     private int[] latIng;
     private String flag;
 

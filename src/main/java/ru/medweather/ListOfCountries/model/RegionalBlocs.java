@@ -11,7 +11,11 @@ public class RegionalBlocs {
     private int id;
     private String acronym;
     private String name;
+
+    @Column(name = "other_acronyms")
     private String[] otherAcronyms;
+
+    @Column(name = "other_names")
     private String[] otherNames;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -12,6 +12,8 @@ public class Language {
     private String iso639_1;
     private String iso639_2;
     private String name;
+
+    @Column(name = "native_name")
     private String nativeName;
 
     @ManyToOne(fetch = FetchType.EAGER)
