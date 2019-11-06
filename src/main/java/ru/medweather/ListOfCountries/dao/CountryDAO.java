@@ -26,15 +26,13 @@ public class CountryDAO {
     }
 
     public void save(Country country) {
-        SessionImpl sessionImpl = (SessionImpl) getCurrentSession();
-        Connection connection = sessionImpl.connection();
         try {
 
-            Array arrayTopLevelDomain = connection.createArrayOf("text", country.getTopLevelDomain());
-            Array arrayLatlng = connection.createArrayOf("text", country.getLatlng());
+            Array arrayTopLevelDomain = getConnection().createArrayOf("text", country.getTopLevelDomain());
+            Array arrayLatlng = getConnection().createArrayOf("text", country.getLatlng());
 
             String sql = "insert into country (name, top_level_domain, population, latlng, flag) values (?, ?, ?, ?, ?)";
-            PreparedStatement ps = connection.prepareStatement(sql);
+            PreparedStatement ps = getConnection().prepareStatement(sql);
             ps.setString(1, country.getName());
             ps.setArray(2, arrayTopLevelDomain);
             ps.setLong(3, country.getPopulation());
@@ -42,11 +40,16 @@ public class CountryDAO {
             ps.setString(5, country.getFlag());
             ps.executeUpdate();
 
-            connection.commit();
+            getConnection().commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private Connection getConnection() {
+        SessionImpl sessionImpl = (SessionImpl) getCurrentSession();
+        return sessionImpl.connection();
     }
 
     private Session getCurrentSession() {

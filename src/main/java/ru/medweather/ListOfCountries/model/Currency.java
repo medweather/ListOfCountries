@@ -13,7 +13,7 @@ public class Currency {
     private String name;
     private String symbol;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "country_id")
     private Country country;
 

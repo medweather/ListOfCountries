@@ -16,7 +16,7 @@ public class Language {
     @Column(name = "native_name")
     private String nativeName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "country_id")
     private Country country;
 

@@ -90,15 +90,21 @@ public class DeserializeComponent implements ApplicationListener<ApplicationRead
 
                     JSONObject jsonObj = (JSONObject) jsonArray.get(i);
                     Country country = gson.fromJson(String.valueOf(jsonObj), Country.class);
+                    country.setId(i + 1);
                     countryDAO.save(country);
+
+                    Currency currency;
+                    Language language;
+                    RegionalBlocs regionalBlocs;
 
                     JSONArray currenciesJson = jsonObj.getJSONArray("currencies");
 
                     for (int c = 0; c < currenciesJson.length(); c++) {
                         if (currenciesJson.get(c) instanceof JSONObject) {
                             JSONObject currencyJson = (JSONObject) currenciesJson.get(c);
-                            Currency currency = gson.fromJson(String.valueOf(currencyJson), Currency.class);
+                            currency = gson.fromJson(String.valueOf(currencyJson), Currency.class);
                             currencyDAO.save(currency);
+                            currencyDAO.saveCountryId(currency, country);
                         }
                     }
 
@@ -107,8 +113,9 @@ public class DeserializeComponent implements ApplicationListener<ApplicationRead
                     for (int l = 0; l < languagesJson.length(); l++) {
                         if (languagesJson.get(l) instanceof JSONObject) {
                             JSONObject languageJson = (JSONObject) languagesJson.get(l);
-                            Language language = gson.fromJson(String.valueOf(languageJson), Language.class);
+                            language = gson.fromJson(String.valueOf(languageJson), Language.class);
                             languageDAO.save(language);
+                            languageDAO.saveCountryId(language, country);
                         }
                     }
 
@@ -117,14 +124,16 @@ public class DeserializeComponent implements ApplicationListener<ApplicationRead
                     for (int r = 0; r < regionalBlocsJson.length(); r++) {
                         if (regionalBlocsJson.get(r) instanceof JSONObject) {
                             JSONObject regionalJson = (JSONObject) regionalBlocsJson.get(r);
-                            RegionalBlocs regionalBlocs = gson.fromJson(String.valueOf(regionalJson), RegionalBlocs.class);
+                            regionalBlocs = gson.fromJson(String.valueOf(regionalJson), RegionalBlocs.class);
                             regionalBlocsDAO.save(regionalBlocs);
+                            regionalBlocsDAO.saveCountryId(regionalBlocs, country);
                         }
                     }
 
                     JSONObject translationsJson = jsonObj.getJSONObject("translations");
                     Translations translations = gson.fromJson(String.valueOf(translationsJson), Translations.class);
                     translationsDAO.save(translations);
+                    translationsDAO.saveCountryId(translations, country);
                 }
             }
         }

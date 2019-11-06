@@ -18,7 +18,7 @@ public class RegionalBlocs {
     @Column(name = "other_names")
     private String[] otherNames;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "country_id")
     private Country country;
 
