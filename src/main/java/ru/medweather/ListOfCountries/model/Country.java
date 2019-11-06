@@ -15,13 +15,11 @@ public class Country {
     @Column(name = "top_level_domain")
     private String[] topLevelDomain;
     private long population;
-
-    @Column(name = "lat_ing")
-    private int[] latIng;
+    private String[] latlng;
     private String flag;
 
     @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-    private List<RegionalBlocs> regionalBlocsList;
+    private List<RegionalBlocs> regionalBlocs;
 
     @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
     private List<Currency> currencies;
@@ -29,17 +27,17 @@ public class Country {
     @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
     private List<Language> languages;
 
-    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-    private List<Translations> translationsList;
+    @OneToOne(mappedBy = "country")
+    private Translations translations;
 
     public Country() {
     }
 
-    public Country(String name, String[] topLevelDomain, long population, int[] latIng, String flag) {
+    public Country(String name, String[] topLevelDomain, long population, String[] latlng, String flag) {
         this.name = name;
         this.topLevelDomain = topLevelDomain;
         this.population = population;
-        this.latIng = latIng;
+        this.latlng = latlng;
         this.flag = flag;
     }
 
@@ -75,12 +73,12 @@ public class Country {
         this.population = population;
     }
 
-    public int[] getLatIng() {
-        return latIng;
+    public String[] getLatlng() {
+        return latlng;
     }
 
-    public void setLatIng(int[] latIng) {
-        this.latIng = latIng;
+    public void setLatlng(String[] latlng) {
+        this.latlng = latlng;
     }
 
     public String getFlag() {
@@ -91,12 +89,12 @@ public class Country {
         this.flag = flag;
     }
 
-    public List<RegionalBlocs> getRegionalBlocsList() {
-        return regionalBlocsList;
+    public List<RegionalBlocs> getRegionalBlocs() {
+        return regionalBlocs;
     }
 
-    public void setRegionalBlocsList(List<RegionalBlocs> regionalBlocsList) {
-        this.regionalBlocsList = regionalBlocsList;
+    public void setRegionalBlocs(List<RegionalBlocs> regionalBlocs) {
+        this.regionalBlocs = regionalBlocs;
     }
 
     public List<Currency> getCurrencies() {
@@ -115,11 +113,11 @@ public class Country {
         this.languages = languages;
     }
 
-    public List<Translations> getTranslationsList() {
-        return translationsList;
+    public Translations getTranslations() {
+        return translations;
     }
 
-    public void setTranslationsList(List<Translations> translationsList) {
-        this.translationsList = translationsList;
+    public void setTranslations(Translations translations) {
+        this.translations = translations;
     }
 }

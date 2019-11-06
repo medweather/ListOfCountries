@@ -20,7 +20,7 @@ public class Translations {
     private String hr;
     private String fa;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "country_id")
     private Country country;
 

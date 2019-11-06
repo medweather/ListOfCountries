@@ -17,6 +17,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'com.google.code.gson:gson:2.8.6'
+	compile 'org.json:json:20171018'
+	compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.4.8.Final'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

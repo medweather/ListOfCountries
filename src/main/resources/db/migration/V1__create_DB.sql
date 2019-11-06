@@ -3,7 +3,7 @@ create table country(
     name text,
     top_level_domain text[],
     population int8,
-    lat_ing int4[],
+    latlng text[],
     flag text,
     primary key (id)
 );
