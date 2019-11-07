@@ -21,37 +21,24 @@ public class RegionalBlocsDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void save(RegionalBlocs regionalBlocs) {
+    public void save(RegionalBlocs regionalBlocs, Country country) {
         try {
             Array arrayOtherAcronyms = getConnection().createArrayOf("text", regionalBlocs.getOtherAcronyms());
             Array arrayOtherNames = getConnection().createArrayOf("text", regionalBlocs.getOtherNames());
 
-            String sql1 = "insert into regional_blocs (acronym, name, other_acronyms, other_names) values (?, ?, ?, ?);";
+            String sql1 = "insert into regional_blocs (acronym, name, other_acronyms, other_names, country_id) values (?, ?, ?, ?, ?);";
             PreparedStatement ps1 = getConnection().prepareStatement(sql1);
             ps1.setString(1, regionalBlocs.getAcronym());
             ps1.setString(2, regionalBlocs.getName());
             ps1.setArray(3, arrayOtherAcronyms);
             ps1.setArray(4, arrayOtherNames);
+            ps1.setInt(5, country.getId());
             ps1.executeUpdate();
 
             getConnection().commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void saveCountryId(RegionalBlocs regionalBlocs, Country country) {
-
-        if(regionalBlocs != null) {
-            try {
-                String sql2 = "update regional_blocs set country_id = " + country.getId() + " where id = " + regionalBlocs.getId() + ";";
-                PreparedStatement ps2 = getConnection().prepareStatement(sql2);
-                ps2.executeUpdate();
-                getConnection().commit();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 

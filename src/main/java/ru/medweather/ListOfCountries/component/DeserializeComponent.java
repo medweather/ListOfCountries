@@ -76,8 +76,7 @@ public class DeserializeComponent implements ApplicationListener<ApplicationRead
                     if (inputStream != null)
                         inputStream.close();
 
-                } catch (Exception ignored) {
-                }
+                } catch (Exception ignored) { }
             }
 
             JSONArray jsonArray = new JSONArray(result);
@@ -125,8 +124,7 @@ public class DeserializeComponent implements ApplicationListener<ApplicationRead
                         if (regionalBlocsJson.get(r) instanceof JSONObject) {
                             JSONObject regionalJson = (JSONObject) regionalBlocsJson.get(r);
                             regionalBlocs = gson.fromJson(String.valueOf(regionalJson), RegionalBlocs.class);
-                            regionalBlocsDAO.save(regionalBlocs);
-                            regionalBlocsDAO.saveCountryId(regionalBlocs, country);
+                            regionalBlocsDAO.save(regionalBlocs, country);
                         }
                     }
 
