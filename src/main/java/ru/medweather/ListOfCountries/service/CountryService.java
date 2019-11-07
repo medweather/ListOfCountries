@@ -1,12 +1,12 @@
 package ru.medweather.ListOfCountries.service;
 
-import org.hibernate.event.spi.DeleteEvent;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.medweather.ListOfCountries.api.CountryApi;
 import ru.medweather.ListOfCountries.api.CountryListApi;
-import ru.medweather.ListOfCountries.api.DeleteDataApi;
+import ru.medweather.ListOfCountries.api.InfoAfterEventOverDataApi;
 import ru.medweather.ListOfCountries.api.ResponseApi;
+import ru.medweather.ListOfCountries.component.DeserializeComponent;
 import ru.medweather.ListOfCountries.dao.*;
 import ru.medweather.ListOfCountries.model.Country;
 
@@ -28,14 +28,17 @@ public class CountryService {
 
     private final ModelMapper modelMapper;
 
+    private final DeserializeComponent deserializeComponent;
+
     public CountryService(CountryDAO countryDAO, CurrencyDAO currencyDAO, LanguageDAO languageDAO, RegionalBlocsDAO regionalBlocsDAO,
-                          TranslationsDAO translationsDAO, ModelMapper modelMapper) {
+                          TranslationsDAO translationsDAO, ModelMapper modelMapper, DeserializeComponent deserializeComponent) {
         this.countryDAO = countryDAO;
         this.currencyDAO = currencyDAO;
         this.languageDAO = languageDAO;
         this.regionalBlocsDAO = regionalBlocsDAO;
         this.translationsDAO = translationsDAO;
         this.modelMapper = modelMapper;
+        this.deserializeComponent = deserializeComponent;
     }
 
     public ResponseApi searchCountry(String name, String domain) {
@@ -52,9 +55,21 @@ public class CountryService {
     public ResponseApi deleteData() {
 
         countryDAO.delete();
-        DeleteDataApi deleteDataApi = new DeleteDataApi();
-        deleteDataApi.setInfo("успешно удалены все данные из бд");
-        return deleteDataApi;
+        currencyDAO.delete();
+        languageDAO.delete();
+        regionalBlocsDAO.delete();
+        translationsDAO.delete();
+        InfoAfterEventOverDataApi infoAfterEventOverDataApi = new InfoAfterEventOverDataApi();
+        infoAfterEventOverDataApi.setInfo("успешно удалены все данные из бд");
+        return infoAfterEventOverDataApi;
+    }
+
+    public ResponseApi saveData() {
+
+        deserializeComponent.saveData();
+        InfoAfterEventOverDataApi infoAfterEventOverDataApi = new InfoAfterEventOverDataApi();
+        infoAfterEventOverDataApi.setInfo("успешно сохранены все данные с удаленного сервера в бд");
+        return infoAfterEventOverDataApi;
     }
 
     private CountryApi fillCountryApi(Country country) {

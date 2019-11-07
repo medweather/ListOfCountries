@@ -2,7 +2,7 @@ package ru.medweather.ListOfCountries.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DeleteDataApi extends ResponseApi {
+public class InfoAfterEventOverDataApi extends ResponseApi {
 
     private String info;
 

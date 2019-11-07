@@ -76,8 +76,8 @@ public class CountryDAO {
 
     public void delete() {
 
-        String sql = "delete from country";
         try {
+            String sql = "delete from country;";
             PreparedStatement ps = getConnection().prepareStatement(sql);
             ps.executeUpdate();
             getConnection().commit();

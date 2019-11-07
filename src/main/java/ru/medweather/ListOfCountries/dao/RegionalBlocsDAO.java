@@ -70,6 +70,18 @@ public class RegionalBlocsDAO {
         return regionalBlocsList;
     }
 
+    public void delete() {
+
+        try {
+            String sql = "delete from regional_blocs;";
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            ps.executeUpdate();
+            getConnection().commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private Connection getConnection() {
         SessionImpl sessionImpl = (SessionImpl) getCurrentSession();
         return sessionImpl.connection();

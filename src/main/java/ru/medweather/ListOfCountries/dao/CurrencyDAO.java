@@ -46,6 +46,18 @@ public class CurrencyDAO {
         return sessionImpl.connection();
     }
 
+    public void delete() {
+
+        try {
+            String sql = "delete from currency;";
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            ps.executeUpdate();
+            getConnection().commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }

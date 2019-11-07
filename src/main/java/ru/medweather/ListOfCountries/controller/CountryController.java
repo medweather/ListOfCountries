@@ -53,7 +53,9 @@ public class CountryController {
      */
     @GetMapping("/save")
     public ResponseEntity saveAllData() {
-        return null;
+
+        ResponseApi responseApi = countryService.saveData();
+        return responseApi == null ? badRequestResponse() : new ResponseEntity<>(responseApi, HttpStatus.OK);
     }
 
     private ResponseEntity<Object> badRequestResponse() {
