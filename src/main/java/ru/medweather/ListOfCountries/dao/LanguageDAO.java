@@ -12,6 +12,7 @@ import ru.medweather.ListOfCountries.model.Language;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -33,6 +34,11 @@ public class LanguageDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Language> getLanguageByCountry(Country country) {
+        return getCurrentSession().createQuery("from Language l where l.countryId = " + country.getId(),
+                Language.class).list();
     }
 
     private Connection getConnection() {

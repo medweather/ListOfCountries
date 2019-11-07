@@ -53,19 +53,3 @@ create table translations(
     primary key (id)
 );
 
-alter table currency
-    add constraint currency_country_fk
-        foreign key (country_id) references country;
-
-alter table language
-    add constraint language_country_fk
-        foreign key (country_id) references country;
-
-alter table regional_blocs
-    add constraint regional_blocs_country_fk
-        foreign key (country_id) references country;
-
-alter table translations
-    add constraint translations_country_fk
-        foreign key (country_id) references country;
-

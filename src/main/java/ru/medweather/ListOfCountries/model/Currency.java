@@ -1,7 +1,5 @@
 package ru.medweather.ListOfCountries.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -15,19 +13,17 @@ public class Currency {
     private String name;
     private String symbol;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "country_id")
-    @JsonIgnore
-    private Country country;
+    @Column(name = "country_id")
+    private int countryId;
 
     public Currency() {
     }
 
-    public Currency(String code, String name, String symbol, Country country) {
+    public Currency(String code, String name, String symbol, int countryId) {
         this.code = code;
         this.name = name;
         this.symbol = symbol;
-        this.country = country;
+        this.countryId = countryId;
     }
 
     public int getId() {
@@ -62,11 +58,11 @@ public class Currency {
         this.symbol = symbol;
     }
 
-    public Country getCountry() {
-        return country;
+    public int getCountryId() {
+        return countryId;
     }
 
-    public void setCountry(Country country) {
-        this.country = country;
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
     }
 }

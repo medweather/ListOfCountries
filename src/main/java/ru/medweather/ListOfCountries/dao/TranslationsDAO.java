@@ -36,6 +36,11 @@ public class TranslationsDAO {
         }
     }
 
+    public Translations getTranslationsByCountry(Country country) {
+        return getCurrentSession().createQuery("from Translations t where t.countryId = " + country.getId(),
+                Translations.class).uniqueResult();
+    }
+
     private Connection getConnection() {
         SessionImpl sessionImpl = (SessionImpl) getCurrentSession();
         return sessionImpl.connection();

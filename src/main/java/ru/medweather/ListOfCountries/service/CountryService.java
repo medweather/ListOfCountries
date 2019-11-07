@@ -1,9 +1,11 @@
 package ru.medweather.ListOfCountries.service;
 
+import org.hibernate.event.spi.DeleteEvent;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.medweather.ListOfCountries.api.CountryApi;
 import ru.medweather.ListOfCountries.api.CountryListApi;
+import ru.medweather.ListOfCountries.api.DeleteDataApi;
 import ru.medweather.ListOfCountries.api.ResponseApi;
 import ru.medweather.ListOfCountries.dao.*;
 import ru.medweather.ListOfCountries.model.Country;
@@ -47,7 +49,22 @@ public class CountryService {
         return countryListApi;
     }
 
+    public ResponseApi deleteData() {
+
+        countryDAO.delete();
+        DeleteDataApi deleteDataApi = new DeleteDataApi();
+        deleteDataApi.setInfo("успешно удалены все данные из бд");
+        return deleteDataApi;
+    }
+
     private CountryApi fillCountryApi(Country country) {
-        return modelMapper.map(country, CountryApi.class);
+
+        CountryApi countryApi = modelMapper.map(country, CountryApi.class);
+        countryApi.setCurrencies(currencyDAO.getListCurrencyByCountry(country));
+        countryApi.setLanguages(languageDAO.getLanguageByCountry(country));
+        countryApi.setRegionalBlocs(regionalBlocsDAO.getRegionalBlocsByCountry(country));
+        countryApi.setTranslations(translationsDAO.getTranslationsByCountry(country));
+
+        return countryApi;
     }
 }

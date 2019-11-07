@@ -1,7 +1,5 @@
 package ru.medweather.ListOfCountries.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -20,20 +18,18 @@ public class RegionalBlocs {
     @Column(name = "other_names")
     private String[] otherNames;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "country_id")
-    @JsonIgnore
-    private Country country;
+    @Column(name = "country_id")
+    private int countryId;
 
     public RegionalBlocs() {
     }
 
-    public RegionalBlocs(String acronym, String name, String[] otherAcronyms, String[] otherNames, Country country) {
+    public RegionalBlocs(String acronym, String name, String[] otherAcronyms, String[] otherNames, int countryId) {
         this.acronym = acronym;
         this.name = name;
         this.otherAcronyms = otherAcronyms;
         this.otherNames = otherNames;
-        this.country = country;
+        this.countryId = countryId;
     }
 
     public int getId() {
@@ -76,11 +72,11 @@ public class RegionalBlocs {
         this.otherNames = otherNames;
     }
 
-    public Country getCountry() {
-        return country;
+    public int getCountryId() {
+        return countryId;
     }
 
-    public void setCountry(Country country) {
-        this.country = country;
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
     }
 }

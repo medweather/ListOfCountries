@@ -18,18 +18,6 @@ public class Country {
     private String[] latlng;
     private String flag;
 
-    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-    private List<RegionalBlocs> regionalBlocs;
-
-    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-    private List<Currency> currencies;
-
-    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-    private List<Language> languages;
-
-    @OneToOne(mappedBy = "country")
-    private Translations translations;
-
     public Country() {
     }
 
@@ -87,37 +75,5 @@ public class Country {
 
     public void setFlag(String flag) {
         this.flag = flag;
-    }
-
-    public List<RegionalBlocs> getRegionalBlocs() {
-        return regionalBlocs;
-    }
-
-    public void setRegionalBlocs(List<RegionalBlocs> regionalBlocs) {
-        this.regionalBlocs = regionalBlocs;
-    }
-
-    public List<Currency> getCurrencies() {
-        return currencies;
-    }
-
-    public void setCurrencies(List<Currency> currencies) {
-        this.currencies = currencies;
-    }
-
-    public List<Language> getLanguages() {
-        return languages;
-    }
-
-    public void setLanguages(List<Language> languages) {
-        this.languages = languages;
-    }
-
-    public Translations getTranslations() {
-        return translations;
-    }
-
-    public void setTranslations(Translations translations) {
-        this.translations = translations;
     }
 }

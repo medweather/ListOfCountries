@@ -12,6 +12,7 @@ import ru.medweather.ListOfCountries.model.Currency;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -33,6 +34,11 @@ public class CurrencyDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Currency> getListCurrencyByCountry(Country country) {
+        return getCurrentSession().createQuery("from Currency c where c.countryId = " + country.getId(),
+                Currency.class).list();
     }
 
     private Connection getConnection() {

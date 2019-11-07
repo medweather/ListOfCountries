@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.medweather.ListOfCountries.api.ResponseApi;
 import ru.medweather.ListOfCountries.service.CountryService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
-@RequestMapping("country")
+@RequestMapping("countries")
 public class CountryController {
 
     private final CountryService countryService;
@@ -25,11 +28,11 @@ public class CountryController {
      */
     @GetMapping("")
     public ResponseEntity searchCountry(
-            @RequestParam String name,
-            @RequestParam String domain
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String domain
     ) {
         ResponseApi responseApi = countryService.searchCountry(name, domain);
-        return new ResponseEntity<>(responseApi, HttpStatus.OK);
+        return responseApi == null ? badRequestResponse() : new ResponseEntity<>(responseApi, HttpStatus.OK);
     }
 
     /**
@@ -39,7 +42,8 @@ public class CountryController {
      */
     @DeleteMapping("")
     public ResponseEntity deleteAllData() {
-        return null;
+        ResponseApi responseApi = countryService.deleteData();
+        return responseApi == null ? badRequestResponse() : new ResponseEntity<>(responseApi, HttpStatus.OK);
     }
 
     /**
@@ -50,5 +54,12 @@ public class CountryController {
     @GetMapping("/save")
     public ResponseEntity saveAllData() {
         return null;
+    }
+
+    private ResponseEntity<Object> badRequestResponse() {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", "invalid_request");
+        response.put("error_description", "not_found");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

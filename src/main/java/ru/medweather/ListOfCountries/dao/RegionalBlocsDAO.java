@@ -9,10 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.medweather.ListOfCountries.model.Country;
 import ru.medweather.ListOfCountries.model.RegionalBlocs;
 
-import java.sql.Array;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -40,6 +39,35 @@ public class RegionalBlocsDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<RegionalBlocs> getRegionalBlocsByCountry(Country country) {
+
+        RegionalBlocs regionalBlocs;
+        List<RegionalBlocs> regionalBlocsList = new ArrayList<>();
+
+        try {
+
+            String sql = "select * from regional_blocs where country_id = " + country.getId() + ";";
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+
+                regionalBlocs = new RegionalBlocs();
+                regionalBlocs.setId(rs.getInt(1));
+                regionalBlocs.setAcronym(rs.getString(2));
+                regionalBlocs.setName(rs.getString(3));
+                regionalBlocs.setOtherAcronyms((String[]) rs.getArray(4).getArray());
+                regionalBlocs.setOtherNames((String[]) rs.getArray(5).getArray());
+                regionalBlocs.setCountryId(country.getId());
+                regionalBlocsList.add(regionalBlocs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return regionalBlocsList;
     }
 
     private Connection getConnection() {

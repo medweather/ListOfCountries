@@ -1,7 +1,5 @@
 package ru.medweather.ListOfCountries.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -22,16 +20,14 @@ public class Translations {
     private String hr;
     private String fa;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "country_id")
-    @JsonIgnore
-    private Country country;
+    @Column(name = "country_id")
+    private int countryId;
 
     public Translations() {
     }
 
     public Translations(String de, String es, String fr, String ja, String it, String br,
-                        String pt, String nl, String hr, String fa, Country country) {
+                        String pt, String nl, String hr, String fa, int countryId) {
         this.de = de;
         this.es = es;
         this.fr = fr;
@@ -42,7 +38,7 @@ public class Translations {
         this.nl = nl;
         this.hr = hr;
         this.fa = fa;
-        this.country = country;
+        this.countryId = countryId;
     }
 
     public int getId() {
@@ -133,12 +129,12 @@ public class Translations {
         this.fa = fa;
     }
 
-    public Country getCountry() {
-        return country;
+    public int getCountryId() {
+        return countryId;
     }
 
-    public void setCountry(Country country) {
-        this.country = country;
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
     }
 }
 
