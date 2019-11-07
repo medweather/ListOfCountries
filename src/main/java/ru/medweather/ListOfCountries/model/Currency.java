@@ -1,5 +1,7 @@
 package ru.medweather.ListOfCountries.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,6 +17,7 @@ public class Currency {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "country_id")
+    @JsonIgnore
     private Country country;
 
     public Currency() {

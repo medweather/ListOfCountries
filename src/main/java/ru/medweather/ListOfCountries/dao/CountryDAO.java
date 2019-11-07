@@ -1,7 +1,9 @@
 package ru.medweather.ListOfCountries.dao;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -45,6 +47,14 @@ public class CountryDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Country> searchCountries(String name, String domain) {
+        Criteria criteria = getCurrentSession().createCriteria(Country.class);
+        if(!name.isEmpty()) {
+            criteria.add(Restrictions.like("name", "%" + name + "%"));
+        }
+        return criteria.list();
     }
 
     private Connection getConnection() {

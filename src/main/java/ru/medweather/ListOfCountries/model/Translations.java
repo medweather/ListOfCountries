@@ -1,5 +1,7 @@
 package ru.medweather.ListOfCountries.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -22,6 +24,7 @@ public class Translations {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "country_id")
+    @JsonIgnore
     private Country country;
 
     public Translations() {

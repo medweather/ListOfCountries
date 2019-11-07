@@ -47,98 +47,103 @@ public class DeserializeComponent implements ApplicationListener<ApplicationRead
 
         log.info("Start jsonData save to database");
 
-        String url = "https://restcountries.eu/rest/v2/all";
-        InputStream inputStream = null;
-        String result = null;
-
         if(!countryDAO.getNameOfCountry().contains("Afghanistan")) {
-            try {
-
-                URLConnection connection = new URL(url).openConnection();
-                connection.setRequestProperty("Content-type", "application/json");
-                inputStream = connection.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-                StringBuilder sb = new StringBuilder();
-
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-
-                    sb.append(line).append("\n");
-                }
-
-                result = sb.toString();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (inputStream != null)
-                        inputStream.close();
-
-                } catch (Exception ignored) { }
-            }
-
-            JSONArray jsonArray = new JSONArray(result);
-            Gson gson = new Gson();
-
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                if (jsonArray.get(i) instanceof JSONObject) {
-
-                    JSONObject jsonObj = (JSONObject) jsonArray.get(i);
-                    Country country = gson.fromJson(String.valueOf(jsonObj), Country.class);
-                    country.setId(i + 1);
-                    countryDAO.save(country);
-
-                    Currency currency;
-                    Language language;
-                    RegionalBlocs regionalBlocs;
-
-                    JSONArray currenciesJson = jsonObj.getJSONArray("currencies");
-
-                    for (int c = 0; c < currenciesJson.length(); c++) {
-                        if (currenciesJson.get(c) instanceof JSONObject) {
-                            JSONObject currencyJson = (JSONObject) currenciesJson.get(c);
-                            currency = gson.fromJson(String.valueOf(currencyJson), Currency.class);
-                            currencyDAO.save(currency);
-                            currencyDAO.saveCountryId(currency, country);
-                        }
-                    }
-
-                    JSONArray languagesJson = jsonObj.getJSONArray("languages");
-
-                    for (int l = 0; l < languagesJson.length(); l++) {
-                        if (languagesJson.get(l) instanceof JSONObject) {
-                            JSONObject languageJson = (JSONObject) languagesJson.get(l);
-                            language = gson.fromJson(String.valueOf(languageJson), Language.class);
-                            languageDAO.save(language);
-                            languageDAO.saveCountryId(language, country);
-                        }
-                    }
-
-                    JSONArray regionalBlocsJson = jsonObj.getJSONArray("regionalBlocs");
-
-                    for (int r = 0; r < regionalBlocsJson.length(); r++) {
-                        if (regionalBlocsJson.get(r) instanceof JSONObject) {
-                            JSONObject regionalJson = (JSONObject) regionalBlocsJson.get(r);
-                            regionalBlocs = gson.fromJson(String.valueOf(regionalJson), RegionalBlocs.class);
-                            regionalBlocsDAO.save(regionalBlocs, country);
-                        }
-                    }
-
-                    JSONObject translationsJson = jsonObj.getJSONObject("translations");
-                    Translations translations = gson.fromJson(String.valueOf(translationsJson), Translations.class);
-                    translationsDAO.save(translations);
-                    translationsDAO.saveCountryId(translations, country);
-                }
-            }
+            saveData();
         }
         else {
             log.info("The data is already in the database");
         }
 
         log.info("End jsonData save to database");
+    }
+
+    public void saveData() {
+
+        String url = "https://restcountries.eu/rest/v2/all";
+        InputStream inputStream = null;
+        String result = null;
+
+        try {
+
+            URLConnection connection = new URL(url).openConnection();
+            connection.setRequestProperty("Content-type", "application/json");
+            inputStream = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+
+                sb.append(line).append("\n");
+            }
+
+            result = sb.toString();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inputStream != null)
+                    inputStream.close();
+
+            } catch (Exception ignored) { }
+        }
+
+        JSONArray jsonArray = new JSONArray(result);
+        Gson gson = new Gson();
+
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+
+            if (jsonArray.get(i) instanceof JSONObject) {
+
+                JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+                Country country = gson.fromJson(String.valueOf(jsonObj), Country.class);
+                country.setId(i + 1);
+                countryDAO.save(country);
+
+                Currency currency;
+                Language language;
+                RegionalBlocs regionalBlocs;
+
+                JSONArray currenciesJson = jsonObj.getJSONArray("currencies");
+
+                for (int c = 0; c < currenciesJson.length(); c++) {
+                    if (currenciesJson.get(c) instanceof JSONObject) {
+                        JSONObject currencyJson = (JSONObject) currenciesJson.get(c);
+                        currency = gson.fromJson(String.valueOf(currencyJson), Currency.class);
+                        currencyDAO.save(currency);
+                        currencyDAO.saveCountryId(currency, country);
+                    }
+                }
+
+                JSONArray languagesJson = jsonObj.getJSONArray("languages");
+
+                for (int l = 0; l < languagesJson.length(); l++) {
+                    if (languagesJson.get(l) instanceof JSONObject) {
+                        JSONObject languageJson = (JSONObject) languagesJson.get(l);
+                        language = gson.fromJson(String.valueOf(languageJson), Language.class);
+                        languageDAO.save(language);
+                        languageDAO.saveCountryId(language, country);
+                    }
+                }
+
+                JSONArray regionalBlocsJson = jsonObj.getJSONArray("regionalBlocs");
+
+                for (int r = 0; r < regionalBlocsJson.length(); r++) {
+                    if (regionalBlocsJson.get(r) instanceof JSONObject) {
+                        JSONObject regionalJson = (JSONObject) regionalBlocsJson.get(r);
+                        regionalBlocs = gson.fromJson(String.valueOf(regionalJson), RegionalBlocs.class);
+                        regionalBlocsDAO.save(regionalBlocs, country);
+                    }
+                }
+
+                JSONObject translationsJson = jsonObj.getJSONObject("translations");
+                Translations translations = gson.fromJson(String.valueOf(translationsJson), Translations.class);
+                translationsDAO.save(translations);
+                translationsDAO.saveCountryId(translations, country);
+            }
+        }
     }
 }
